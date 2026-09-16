@@ -1,0 +1,267 @@
+.canvas-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: auto;
+  position: relative;
+  min-height: 600px;
+}
+
+.canvas-preview.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  height: 100%;
+}
+
+.preview-frame {
+  width: 420px;
+  height: 840px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+/* ==================== LAYOUTS ==================== */
+
+.layout-top {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout-top .image-container {
+  flex: 0 0 50%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.layout-top .text-container {
+  flex: 0 0 50%;
+  overflow: auto;
+}
+
+.layout-middle {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout-middle .text-container.small {
+  flex: 0 0 25%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px;
+}
+
+.layout-middle .image-container {
+  flex: 0 0 50%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.layout-bottom {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout-bottom .text-container {
+  flex: 0 0 50%;
+  overflow: auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.layout-bottom .image-container {
+  flex: 0 0 50%;
+}
+
+.layout-full {
+  position: relative;
+  height: 100%;
+}
+
+.layout-full .image-container.full {
+  position: absolute;
+  inset: 0;
+}
+
+.layout-left,
+.layout-right {
+  display: flex;
+  height: 100%;
+}
+
+.layout-left .image-container.small,
+.layout-right .image-container.small {
+  flex: 0 0 40%;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.layout-left .text-container,
+.layout-right .text-container {
+  flex: 1;
+  overflow: auto;
+}
+
+.layout-right .image-container.small {
+  border-right: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  order: 2;
+}
+
+.layout-right .text-container {
+  order: 1;
+}
+
+/* ==================== CONTENT CONTAINERS ==================== */
+
+.image-container {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.02) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+}
+
+.text-container {
+  padding: 32px 24px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.text-container p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.7;
+}
+
+.text-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 32px 24px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.text-overlay p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: center;
+  line-height: 1.7;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ==================== INDICATOR ==================== */
+
+.scene-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== SCROLLBAR ==================== */
+
+.canvas-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.canvas-preview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.canvas-preview::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.canvas-preview::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.text-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.text-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+/* ==================== 반응형 ==================== */
+
+@media (max-width: 1024px) {
+  .preview-frame {
+    width: 100%;
+    max-width: 420px;
+    height: 600px;
+  }
+
+  .preview-container {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .canvas-preview {
+    min-height: 400px;
+  }
+
+  .preview-frame {
+    width: 100%;
+    height: 500px;
+  }
+}

@@ -1,0 +1,303 @@
+.properties-panel {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
+.scene-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.properties-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* ==================== PROPERTY SECTION ==================== */
+
+.property-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.section-header svg {
+  color: #6366f1;
+  opacity: 0.8;
+}
+
+.section-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+/* ==================== TEXT EDITOR ==================== */
+
+.text-editor {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.text-editor:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.text-editor::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.text-info {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.char-count {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* ==================== IMAGE SECTION ==================== */
+
+.image-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview .placeholder {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.upload-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.upload-btn {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--text-primary);
+}
+
+.upload-file:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #6366f1;
+}
+
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== URL INPUT ==================== */
+
+.url-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.url-input-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.url-input {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.url-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.url-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* ==================== TEMPLATE INFO ==================== */
+
+.template-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+  font-size: 11px;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.info-row .label {
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+}
+
+.info-row .value {
+  font-weight: 600;
+  color: #6366f1;
+  letter-spacing: -0.2px;
+}
+
+/* ==================== 스크롤바 ==================== */
+
+.properties-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.properties-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.properties-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.properties-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ==================== 반응형 ==================== */
+
+@media (max-width: 1400px) {
+  .properties-content {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .text-editor {
+    height: 100px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .properties-panel {
+    max-height: 400px;
+  }
+}
