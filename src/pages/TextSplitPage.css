@@ -45,3 +45,24 @@
   color: var(--text-secondary);
   margin-bottom: 32px;
 }
+
+.templates-info {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.templates-info p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  padding: 12px;
+  background-color: rgba(99, 102, 241, 0.05);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+}

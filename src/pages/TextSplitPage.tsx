@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { ArrowRight, ChevronLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import FileUpload from '@/components/TextSplit/FileUpload'
 import SplitOptions from '@/components/TextSplit/SplitOptions'
 import PreviewScenes from '@/components/TextSplit/PreviewScenes'
+import TemplateSelector from '@/components/TemplateSelector'
 import './TextSplitPage.css'
 
-type Step = 'upload' | 'options' | 'preview' | 'editor'
+type Step = 'upload' | 'options' | 'preview' | 'template' | 'canvas'
 
 interface Scene {
   id: string
@@ -14,11 +15,19 @@ interface Scene {
   thumbnail?: string
 }
 
+interface SelectedTemplates {
+  layout: string
+  font: string
+  color: string
+  animation: string
+}
+
 export default function TextSplitPage() {
   const [step, setStep] = useState<Step>('upload')
   const [content, setContent] = useState('')
   const [scenes, setScenes] = useState<Scene[]>([])
   const [splitMethod, setSplitMethod] = useState<'manual' | 'paragraph' | 'clause' | 'ai'>('manual')
+  const [selectedTemplates, setSelectedTemplates] = useState<SelectedTemplates | null>(null)
 
   const handleFileUpload = (text: string) => {
     setContent(text)
@@ -32,13 +41,19 @@ export default function TextSplitPage() {
 
   const handlePreviewComplete = (splitScenes: Scene[]) => {
     setScenes(splitScenes)
-    setStep('editor')
+    setStep('template')
+  }
+
+  const handleTemplateSelect = (templates: SelectedTemplates) => {
+    setSelectedTemplates(templates)
+    setStep('canvas')
   }
 
   const handleBack = () => {
     if (step === 'options') setStep('upload')
     else if (step === 'preview') setStep('options')
-    else if (step === 'editor') setStep('preview')
+    else if (step === 'template') setStep('preview')
+    else if (step === 'canvas') setStep('template')
   }
 
   return (
@@ -69,11 +84,21 @@ export default function TextSplitPage() {
         />
       )}
 
-      {step === 'editor' && (
+      {step === 'template' && (
+        <TemplateSelector onSelectTemplates={handleTemplateSelect} />
+      )}
+
+      {step === 'canvas' && selectedTemplates && (
         <div className="step-container">
-          <h2>장면 편집</h2>
-          <p className="subtitle">총 {scenes.length}개 장면으로 분할되었습니다</p>
-          {/* Scene editor will go here */}
+          <h2>캔버스 에디터</h2>
+          <p className="subtitle">총 {scenes.length}개 장면을 배치하세요</p>
+          <div className="templates-info">
+            <p>📐 레이아웃: {selectedTemplates.layout}</p>
+            <p>🔤 폰트: {selectedTemplates.font}</p>
+            <p>🎨 컬러: {selectedTemplates.color}</p>
+            <p>✨ 애니메이션: {selectedTemplates.animation}</p>
+          </div>
+          {/* Canvas editor will go here */}
         </div>
       )}
     </div>
