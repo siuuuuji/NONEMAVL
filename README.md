@@ -119,3 +119,8 @@ TBD
 ---
 
 **문의**: bureem0000@gmail.com
+
+# 배포 환경변수 설정 완료 ✅
+
+- VITE_GEMINI_API_KEY: 설정됨
+- Vercel 배포 준비 완료
