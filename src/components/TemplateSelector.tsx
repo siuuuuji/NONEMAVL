@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { layoutTemplates, fontTemplates, colorTemplates, animationTemplates } from '@/data/templates'
 import { Layout, Type, Palette, Zap } from 'lucide-react'
+import type { LayoutTemplate, FontTemplate, ColorTemplate, AnimationTemplate } from '@/types/templates'
 import './TemplateSelector.css'
 
 type TemplateCategory = 'layout' | 'font' | 'color' | 'animation'
@@ -86,11 +87,11 @@ export default function TemplateSelector({ onSelectTemplates }: TemplateSelector
                       style={{
                         width: '100%',
                         height: '100%',
-                        background: template.bgColor,
+                        background: (template as ColorTemplate).bgColor,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: template.textColor
+                        color: (template as ColorTemplate).textColor
                       }}
                     >
                       <span style={{ fontSize: '12px' }}>Sample Text</span>
@@ -99,10 +100,10 @@ export default function TemplateSelector({ onSelectTemplates }: TemplateSelector
                   {activeCategory === 'font' && (
                     <div
                       style={{
-                        fontSize: `${template.fontSize}px`,
-                        fontFamily: template.fontFamily,
-                        lineHeight: `${template.lineHeight}`,
-                        letterSpacing: `${template.letterSpacing}px`,
+                        fontSize: `${(template as FontTemplate).fontSize}px`,
+                        fontFamily: (template as FontTemplate).fontFamily,
+                        lineHeight: `${(template as FontTemplate).lineHeight}`,
+                        letterSpacing: `${(template as FontTemplate).letterSpacing}px`,
                         padding: '16px'
                       }}
                     >
@@ -110,17 +111,17 @@ export default function TemplateSelector({ onSelectTemplates }: TemplateSelector
                     </div>
                   )}
                   {activeCategory === 'layout' && (
-                    <div className={`layout-preview layout-${template.imagePosition}`}>
+                    <div className={`layout-preview layout-${(template as LayoutTemplate).imagePosition}`}>
                       <div className="layout-image">이미지</div>
                       <div className="layout-text">텍스트</div>
                     </div>
                   )}
                   {activeCategory === 'animation' && (
-                    <div className={`animation-preview anim-${template.transitionType}`}>
+                    <div className={`animation-preview anim-${(template as AnimationTemplate).transitionType}`}>
                       <div className="anim-box">
-                        {template.transitionType}
+                        {(template as AnimationTemplate).transitionType}
                         <br />
-                        {template.duration}ms
+                        {(template as AnimationTemplate).duration}ms
                       </div>
                     </div>
                   )}

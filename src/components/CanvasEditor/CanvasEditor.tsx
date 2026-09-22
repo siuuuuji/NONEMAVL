@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Save, Plus, Trash2, Copy, ZoomIn, ZoomOut, Download } from 'lucide-react'
+import { Save, ZoomIn, ZoomOut, Download } from 'lucide-react'
 import CanvasPreview from './CanvasPreview'
 import SceneListPanel from './SceneListPanel'
 import PropertiesPanel from './PropertiesPanel'
