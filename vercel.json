@@ -5,10 +5,7 @@
   "framework": "vite",
   "outputDirectory": "dist",
   "env": {
-    "VITE_GEMINI_API_KEY": {
-      "description": "Google Gemini API Key for text splitting",
-      "required": false
-    }
+    "VITE_GEMINI_API_KEY": "gen-lang-client-0015178620"
   },
   "headers": [
     {
