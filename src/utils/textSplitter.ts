@@ -1,12 +1,9 @@
+import type { Scene } from "../types"
+
 interface SplitScene {
   id: string
   index: number
   text: string
-}
-
-interface SplitResult {
-  scenes: SplitScene[]
-  method: 'manual' | 'paragraph' | 'clause' | 'ai'
 }
 
 export const manualSplit = (text: string): SplitScene[] => {
@@ -64,7 +61,7 @@ export const clauseSplit = (text: string): SplitScene[] => {
   }))
 }
 
-export const aiSplit = async (text: string): Promise<SplitScene[]> => {
+export const geminiSplit = async (text: string): Promise<SplitScene[]> => {
   const prompt = `당신은 텍스트를 의미있는 장면들로 나누는 전문가입니다.
 
 다음 텍스트를 5-10개의 장면으로 나누세요. 각 장면은:
@@ -140,8 +137,8 @@ ${text}`
 
 export const splitText = async (
   text: string,
-  method: 'manual' | 'paragraph' | 'clause' | 'ai'
-): Promise<SplitResult> => {
+  method: 'manual' | 'paragraph' | 'clause' | 'gemini'
+): Promise<Scene[]> => {
   let scenes: SplitScene[]
 
   switch (method) {
@@ -154,12 +151,16 @@ export const splitText = async (
     case 'clause':
       scenes = clauseSplit(text)
       break
-    case 'ai':
-      scenes = await aiSplit(text)
+    case 'gemini':
+      scenes = await geminiSplit(text)
       break
     default:
       scenes = manualSplit(text)
   }
 
-  return { scenes, method }
+  return scenes.map((s): Scene => ({
+    id: s.id,
+    text: s.text,
+    order: s.index,
+  }))
 }

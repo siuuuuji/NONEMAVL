@@ -1,103 +1,98 @@
-import { useMemo, useState } from "react";
-import { StoreProvider, useStore } from "./state/store";
+import { useState } from "react";
 import { ToastProvider } from "./components/common/Toast";
-import { SplashScreen } from "./screens/onboarding/SplashScreen";
-import { OnboardingFlow } from "./screens/onboarding/OnboardingFlow";
-import { TopStatusBar } from "./components/shell/TopStatusBar";
-import { BottomNav } from "./components/shell/BottomNav";
-import { RoleSwitcher } from "./components/shell/RoleSwitcher";
-import { RecorderHome } from "./screens/home/RecorderHome";
-import { FamilyHome } from "./screens/home/FamilyHome";
-import { StoryScreen } from "./screens/story/StoryScreen";
-import { BookScreen } from "./screens/book/BookScreen";
-import { RadioScreen } from "./screens/radio/RadioScreen";
-import { MoreScreen } from "./screens/more/MoreScreen";
-import { ConversationScreen } from "./screens/conversation/ConversationScreen";
-import { NewsComposeScreen } from "./screens/news/NewsComposeScreen";
-import { canViewMemory, isRecorderViewer } from "./lib/visibility";
-import { useSplashTimer } from "./lib/useSplashTimer";
+import { CinematicReader } from "./components/CinematicReader/CinematicReader";
+import { splitText } from "./utils/textSplitter";
+import type { Scene } from "./types";
+import "./App.css";
 
-export type Tab = "home" | "story" | "radio" | "book" | "more";
-export type Overlay = "conversation" | "newsCompose" | null;
-
-function Shell() {
-  const store = useStore();
-  const { state } = store;
-  const [tab, setTab] = useState<Tab>("home");
-  const [overlay, setOverlay] = useState<Overlay>(null);
-
-  const viewer = useMemo(
-    () => state.family.members.find((m) => m.id === state.activeViewerId) ?? state.family.members[0],
-    [state.family.members, state.activeViewerId]
-  );
-  const recorderView = isRecorderViewer(viewer.id, state.family);
-
-  const unreadCount = recorderView
-    ? state.pages.filter((p) => p.status === "needs_review").length +
-      state.newsItems.filter((n) => n.status === "scheduled").length
-    : state.memories.filter(
-        (m) => canViewMemory(m, viewer.id, state.family) && Date.now() - new Date(m.createdAt).getTime() < 3 * 24 * 60 * 60 * 1000
-      ).length;
-
-  if (!state.onboardingComplete) {
-    return <OnboardingFlow />;
-  }
-
-  if (overlay === "conversation") {
-    return <ConversationScreen onClose={() => setOverlay(null)} />;
-  }
-  if (overlay === "newsCompose") {
-    return <NewsComposeScreen onClose={() => setOverlay(null)} />;
-  }
-
-  return (
-    <div className="app-shell">
-      <TopStatusBar
-        groupName={state.family.name}
-        viewerName={viewer.displayName}
-        viewerRelationship={viewer.relationship}
-        unreadCount={unreadCount}
-        onOpenProfile={() => setTab("more")}
-      />
-
-      <main>
-        {tab === "home" &&
-          (recorderView ? (
-            <RecorderHome
-              onStartConversation={() => setOverlay("conversation")}
-              onOpenRadio={() => setTab("radio")}
-              onOpenBook={() => setTab("book")}
-            />
-          ) : (
-            <FamilyHome viewerId={viewer.id} onComposeNews={() => setOverlay("newsCompose")} onOpenBook={() => setTab("book")} />
-          ))}
-
-        {tab === "story" && (
-          <StoryScreen
-            viewerId={viewer.id}
-            recorderView={recorderView}
-            onStartConversation={() => setOverlay("conversation")}
-          />
-        )}
-
-        {tab === "radio" && <RadioScreen viewerId={viewer.id} recorderView={recorderView} onComposeNews={() => setOverlay("newsCompose")} />}
-
-        {tab === "book" && <BookScreen viewerId={viewer.id} recorderView={recorderView} />}
-
-        {tab === "more" && <MoreScreen viewer={viewer} recorderView={recorderView} />}
-      </main>
-
-      <RoleSwitcher members={state.family.members} activeId={state.activeViewerId} onSwitch={store.setActiveViewer} />
-      <BottomNav active={tab} onChange={setTab} />
-    </div>
-  );
-}
+type AppStep = "home" | "upload" | "reader";
 
 export default function App() {
-  const showSplash = useSplashTimer(900);
+  const [step, setStep] = useState<AppStep>("home");
+  const [scenes, setScenes] = useState<Scene[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleFileUpload = async (file: File) => {
+    setIsProcessing(true);
+    try {
+      const text = await file.text();
+      const splitScenes = await splitText(text, "paragraph");
+      setScenes(splitScenes);
+      setStep("reader");
+    } catch (error) {
+      console.error("Failed to process file:", error);
+      alert("파일 처리 중 오류가 발생했습니다.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.currentTarget.classList.add("drag-over");
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove("drag-over");
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove("drag-over");
+    const file = e.dataTransfer.files[0];
+    if (file && (file.type.includes("text") || file.name.endsWith(".txt"))) {
+      handleFileUpload(file);
+    }
+  };
+
   return (
     <ToastProvider>
-      <StoreProvider>{showSplash ? <SplashScreen /> : <Shell />}</StoreProvider>
+      {step === "home" && (
+        <div className="home">
+          <div className="hero">
+            <h1>NONEMAVL</h1>
+            <p>소설을 인터랙티브 시각적 프로토타입으로 변환하세요</p>
+          </div>
+          <button onClick={() => setStep("upload")} className="btn btn-primary">
+            시작하기
+          </button>
+        </div>
+      )}
+
+      {step === "upload" && (
+        <div className="upload-screen">
+          <div
+            className="upload-area"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <div className="upload-content">
+              <h2>📄 텍스트 파일 업로드</h2>
+              <p>txt 파일을 드래그 앤드 드롭하거나 클릭해서 선택하세요</p>
+              <input
+                type="file"
+                accept=".txt,.text"
+                onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                style={{ display: "none" }}
+                id="file-input"
+              />
+              <button
+                className="btn btn-secondary"
+                onClick={() => document.getElementById("file-input")?.click()}
+                disabled={isProcessing}
+              >
+                {isProcessing ? "처리 중..." : "파일 선택"}
+              </button>
+            </div>
+          </div>
+          <button onClick={() => setStep("home")} className="btn btn-back">
+            돌아가기
+          </button>
+        </div>
+      )}
+
+      {step === "reader" && <CinematicReader scenes={scenes} onBack={() => setStep("home")} />}
     </ToastProvider>
   );
 }
