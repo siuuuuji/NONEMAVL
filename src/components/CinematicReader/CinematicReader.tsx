@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { useSoundEffects } from "../../hooks/useSoundEffects";
 import type { Scene } from "../../types";
 import "./CinematicReader.css";
 
@@ -13,6 +14,13 @@ export function CinematicReader({ scenes, onBack }: CinematicReaderProps) {
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [imageLoading, setImageLoading] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  const { playSceneTransition, playClickSound } = useSoundEffects({
+    enabled: soundEnabled,
+    volume: 0.3,
+    sceneTransitionSound: 'transition'
+  });
 
   const currentScene = scenes[currentIndex];
   const progress = ((currentIndex + 1) / scenes.length) * 100;
@@ -22,6 +30,13 @@ export function CinematicReader({ scenes, onBack }: CinematicReaderProps) {
       setImageLoading(true);
     }
   }, [currentIndex, currentScene.imageUrl]);
+
+  // 장면 변경 시 사운드 재생
+  useEffect(() => {
+    if (currentIndex > 0) {
+      playSceneTransition();
+    }
+  }, [currentIndex, playSceneTransition]);
 
   useEffect(() => {
     if (!isAutoPlay) return;
@@ -40,12 +55,14 @@ export function CinematicReader({ scenes, onBack }: CinematicReaderProps) {
 
   const handleNext = () => {
     if (currentIndex < scenes.length - 1) {
+      playClickSound();
       setCurrentIndex((i) => i + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
+      playClickSound();
       setCurrentIndex((i) => i - 1);
     }
   };
@@ -92,6 +109,10 @@ export function CinematicReader({ scenes, onBack }: CinematicReaderProps) {
 
           <button onClick={handleNext} disabled={currentIndex === scenes.length - 1} className="btn btn-next">
             <ChevronRight size={20} />
+          </button>
+
+          <button onClick={() => setSoundEnabled(!soundEnabled)} className="btn btn-sound" title={soundEnabled ? "음소거" : "음소거 해제"}>
+            {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
         </div>
 

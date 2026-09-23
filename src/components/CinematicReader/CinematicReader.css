@@ -209,6 +209,17 @@
   font-size: 14px;
 }
 
+.btn-sound {
+  background: rgba(226, 169, 92, 0.15);
+  border-color: rgba(226, 169, 92, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-sound:hover:not(:disabled) {
+  background: rgba(226, 169, 92, 0.25);
+  border-color: rgba(226, 169, 92, 0.6);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .reader-container {
