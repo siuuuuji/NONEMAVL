@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ToastProvider } from "./components/common/Toast";
 import { CinematicReader } from "./components/CinematicReader/CinematicReader";
 import { splitText } from "./utils/textSplitter";
+import { useImageGeneration } from "./hooks/useImageGeneration";
 import type { Scene } from "./types";
 import "./App.css";
 
@@ -11,13 +12,18 @@ export default function App() {
   const [step, setStep] = useState<AppStep>("home");
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { isGenerating, generateImagesForScenes, error: imageError } = useImageGeneration();
 
   const handleFileUpload = async (file: File) => {
     setIsProcessing(true);
     try {
       const text = await file.text();
       const splitScenes = await splitText(text, "paragraph");
-      setScenes(splitScenes);
+
+      // Generate images for all scenes
+      const scenesWithImages = await generateImagesForScenes(splitScenes);
+
+      setScenes(scenesWithImages);
       setStep("reader");
     } catch (error) {
       console.error("Failed to process file:", error);
@@ -80,9 +86,9 @@ export default function App() {
               <button
                 className="btn btn-secondary"
                 onClick={() => document.getElementById("file-input")?.click()}
-                disabled={isProcessing}
+                disabled={isProcessing || isGenerating}
               >
-                {isProcessing ? "처리 중..." : "파일 선택"}
+                {isProcessing || isGenerating ? "처리 중..." : "파일 선택"}
               </button>
             </div>
           </div>

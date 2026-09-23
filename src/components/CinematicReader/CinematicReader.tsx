@@ -18,6 +18,12 @@ export function CinematicReader({ scenes, onBack }: CinematicReaderProps) {
   const progress = ((currentIndex + 1) / scenes.length) * 100;
 
   useEffect(() => {
+    if (currentScene.imageUrl) {
+      setImageLoading(true);
+    }
+  }, [currentIndex, currentScene.imageUrl]);
+
+  useEffect(() => {
     if (!isAutoPlay) return;
 
     const delay = 3000 / speed;
